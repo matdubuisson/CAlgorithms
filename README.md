@@ -1,0 +1,2 @@
+# CAlgorithms
+Yes I know these algorithms are already implemented for me and I should not re-invent the wheel.... You know what I don't care. Let me enjoy my geek life, I love to write C code producing friendly Segfault that you have no clues where it comes from your program with thoushands of lines of code. Whatever you think I won't change my mind.
