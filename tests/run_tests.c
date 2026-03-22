@@ -1,7 +1,7 @@
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
 
-#include "Test/Test.h"
+#include "list/test_list.h"
 
 static void intro_test(void) {
     CU_PASS("Success");
@@ -15,7 +15,8 @@ int main(void) {
     CU_pSuite suite = CU_add_suite("Simple tests", 0, 0);
     CU_add_test(suite, "Introduction test", intro_test);
 
-    LIST_test();
+    make_list_suite(LINKED_LIST);
+    make_list_suite(ARRAY_LIST);
 
     CU_basic_run_tests();
     CU_cleanup_registry();

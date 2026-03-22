@@ -5,25 +5,25 @@
 #include <stddef.h>
 
 typedef enum {
-    LIST_ARRAY,
-    LIST_LINKED,
-    LIST_NOT_IMPLEMENTED
-} ListType;
+    ARRAY_LIST,
+    LINKED_LIST,
+    NOT_IMPLEMENTED_LIST
+} list_type_t;
 
 typedef enum {
-    LIST_SORTED = 1
-} ListFlag;
+    list_SORTED = 1
+} list_flag_t;
 
-#include "List/ListArray.h"
-#include "List/ListLinked.h"
+#include "list/array_list.h"
+#include "list/linked_list.h"
 
-typedef union ListConcrete {
-    ListArray list_array;
-    ListLinked list_linked;
-} ListConcrete;
+typedef union concrete_list {
+    array_list_t array_list;
+    linked_list_t linked_list;
+} concrete_list_t;
 
-typedef struct List {
-    ListType type;
+typedef struct list {
+    list_type_t type;
 
     uint32_t length;
     uint32_t data_size;
@@ -31,207 +31,207 @@ typedef struct List {
 
     int32_t (*comparator)(const void*, const void*);
 
-    ListConcrete concrete;
-} List;
+    concrete_list_t concrete;
+} list_t;
 
 // Allocation Management
 
 /**
  * @brief Create a new list with a specific type and initial_length carrying blocks of data_size bytes
  * 
- * @param type ListType
+ * @param type list_type_t
  * @param initial_length uint32_t
  * @param data_size uint32_t
- * @return List* 
+ * @return list_t* 
  * 
  * @note Initial length may be negliged depending on the type of list used
  */
-List* LIST_create(ListType type, uint32_t initial_length, uint32_t data_size, int32_t (*comparator)(const void*, const void*));
+list_t* list_create(list_type_t type, uint32_t initial_length, uint32_t data_size, int32_t (*comparator)(const void*, const void*));
 
 /**
  * @brief Destroy a list thus free all allocations associated with this list
  * 
- * @param list List*
+ * @param list list_t*
  */
-void LIST_destroy(List *list);
+void list_destroy(list_t *list);
 
 // Get Meta-Data
 
 /**
  * @brief Return the type of the list
  * 
- * @param list List*
- * @return ListType 
+ * @param list list_t*
+ * @return list_type_t 
  */
-ListType LIST_get_type(const List *list);
+list_type_t list_get_type(const list_t *list);
 
 /**
  * @brief Return the length of the list in other words the number of elements
  * 
- * @param list List*
+ * @param list list_t*
  * @return uint32_t 
  */
-uint32_t LIST_get_length(const List *list);
+uint32_t list_get_length(const list_t *list);
 
 /**
  * @brief Return the size for one single element
  * 
- * @param list List*
+ * @param list list_t*
  * @return uint32_t 
  */
-uint32_t LIST_get_data_size(const List *list);
+uint32_t list_get_data_size(const list_t *list);
 
 /**
  * @brief Tell if the list is sorted
  * 
- * @param list List*
+ * @param list list_t*
  * @return uint8_t 
  * 
  * @note Calls add and sort are used to maintain order but add_first, add_last, insert and set can break the order
  */
-uint8_t LIST_is_sorted(const List *list);
+uint8_t list_is_sorted(const list_t *list);
 
 // Add Data
 
 /**
  * @brief Add a new element in front of the list
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @return int8_t 
  */
-int8_t LIST_add_first(List *list, void *element);
+int8_t list_add_first(list_t *list, void *element);
 
 /**
  * @brief Add a new element at the end of the list
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @return int8_t 
  */
-int8_t LIST_add_last(List *list, void *element);
+int8_t list_add_last(list_t *list, void *element);
 
 /**
  * @brief Add a new element in a sorted manner
  * 
- * @param list List*List*
+ * @param list list_t*list_t*
  * @param element void*
  * @return int8_t 
  * 
  * @note This call will produce a sorted adding only if the list is already sorted
  */
-int8_t LIST_add(List *list, void *element); // Also sort data
+int8_t list_add(list_t *list, void *element); // Also sort data
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @param index 
  * @return int8_t 
  */
-int8_t LIST_insert(List *list, void *element, uint32_t index);
+int8_t list_insert(list_t *list, void *element, uint32_t index);
 
 // Modify Data
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @param index 
  * @return int8_t 
  */
-int8_t LIST_set(List *list, void *element, uint32_t index);
+int8_t list_set(list_t *list, void *element, uint32_t index);
 
 // Get Data
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return void* 
  */
-void *LIST_get_first(List *list);
+void *list_get_first(list_t *list);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return void* 
  */
-void *LIST_get_last(List * list);
+void *list_get_last(list_t * list);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param index 
  * @return void* 
  */
-void *LIST_get(List *list, uint32_t index);
+void *list_get(list_t *list, uint32_t index);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @return int8_t 
  */
-int8_t LIST_contains(List *list, void *element);
+int8_t list_contains(list_t *list, void *element);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param element 
  * @return uint32_t 
  */
-uint32_t LIST_find(List *list, void *element);
+uint32_t list_find(list_t *list, void *element);
 
 // Remove Data
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return int8_t 
  */
-void *LIST_remove_first(List *list);
+void *list_remove_first(list_t *list);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return int8_t 
  */
-void *LIST_remove_last(List *list);
+void *list_remove_last(list_t *list);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @param index 
  * @return int8_t 
  */
-void *LIST_remove(List *list, uint32_t index);
+void *list_remove(list_t *list, uint32_t index);
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return int8_t 
  */
-int8_t LIST_clear(List *list);
+int8_t list_clear(list_t *list);
 
 // Sort Data
 
 /**
  * @brief 
  * 
- * @param list List*
+ * @param list list_t*
  * @return int8_t 
  */
-int8_t LIST_sort(List *list);
+int8_t list_sort(list_t *list);
 
 #endif

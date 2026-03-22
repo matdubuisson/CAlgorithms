@@ -1,0 +1,3 @@
+target_include_directories(calgorithmslib PUBLIC include)
+
+add_subdirectory(list)
