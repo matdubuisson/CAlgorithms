@@ -56,3 +56,6 @@ dkms.conf
 
 # cmake files
 build/
+
+# vscode
+.vscode/

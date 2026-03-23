@@ -13,44 +13,44 @@ list_t *list = NULL;
 list_type_t type = LINKED_LIST;
 uint32_t initial_length = 0, data_size = 4;
 
-static int init_linked_list_suite(void) {
+extern int init_linked_list_suite(void) {
     type = LINKED_LIST;
     initial_length = 8;
     data_size = 4;
     return 0;
 }
 
-static int init_array_list_suite(void) {
+extern int init_array_list_suite(void) {
     type = ARRAY_LIST;
     initial_length = 8;
     data_size = 4;
     return 0;
 }
 
-static int clean_suite(void) {
+extern int clean_suite(void) {
     return 0;
 }
 
-static int32_t comparator(const void *element, const void *element2) {
+extern int32_t comparator(const void *element, const void *element2) {
     uint32_t e = *(const uint32_t*) element, e2 = *(const uint32_t*) element2;
     if (e == e2) return 0;
     else if (e < e2) return -1;
     else return 1;
 }
 
-static int init_test(void) {
+extern int init_test(void) {
     list = list_create(type, initial_length, data_size, comparator);
     return list == NULL ? -1 : 0;
 }
 
-static int clean_test(void) {
+extern int clean_test(void) {
     if (list != NULL) {
         list_destroy(list);
         return 0;
     } else return -1;
 }
 
-static void get_metrics_test(void) {
+extern void get_metrics_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     CU_ASSERT_EQUAL(list_get_type(list), type);
@@ -62,7 +62,7 @@ static void get_metrics_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_add_first_test(void) {
+extern void simple_add_first_test(void) {
     uint32_t element = 14;
     CU_ASSERT_FALSE(init_test());
 
@@ -73,7 +73,7 @@ static void simple_add_first_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_add_last_test(void) {
+extern void simple_add_last_test(void) {
     uint32_t element = 14;
     CU_ASSERT_FALSE(init_test());
 
@@ -84,7 +84,7 @@ static void simple_add_last_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_contains_test(void) {
+extern void simple_contains_test(void) {
     uint32_t element = 14, element2 = 16, element3 = 14;
     CU_ASSERT_FALSE(init_test());
 
@@ -110,7 +110,7 @@ static void simple_contains_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_get_first_and_get_last_test(void) {
+extern void simple_get_first_and_get_last_test(void) {
     uint32_t element = 13, element2 = 14, element3 = 16;
     CU_ASSERT_FALSE(init_test());
 
@@ -134,7 +134,7 @@ static void simple_get_first_and_get_last_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_get_test(void) {
+extern void simple_get_test(void) {
     uint32_t element = 13, element2 = 14, element3 = 16;
     CU_ASSERT_FALSE(init_test());
 
@@ -162,7 +162,7 @@ static void simple_get_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_insert_test(void) {
+extern void simple_insert_test(void) {
     uint32_t element = 13, element2 = 14, element3 = 16;
     CU_ASSERT_FALSE(init_test());
 
@@ -191,7 +191,7 @@ static void simple_insert_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_get_and_set_test(void) {
+extern void simple_get_and_set_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -218,7 +218,7 @@ static void simple_get_and_set_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_find_test(void) {
+extern void simple_find_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {11, 38, 93, 10, 1, 0, 15, 17, 77, 99};
@@ -238,7 +238,7 @@ static void simple_find_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_remove_first_test(void) {
+extern void simple_remove_first_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -268,7 +268,7 @@ static void simple_remove_first_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_remove_last_test(void) {
+extern void simple_remove_last_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -298,7 +298,7 @@ static void simple_remove_last_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_remove_test(void) {
+extern void simple_remove_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81};
@@ -350,7 +350,7 @@ static void simple_remove_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_add_test(void) {
+extern void simple_add_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t g = 47, p = 67;
@@ -376,7 +376,7 @@ static void simple_add_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_clear_test(void) {
+extern void simple_clear_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t values[10] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81};
@@ -396,7 +396,7 @@ static void simple_clear_test(void) {
     CU_ASSERT_FALSE(clean_test());
 }
 
-static void simple_sort_test(void) {
+extern void simple_sort_test(void) {
     CU_ASSERT_FALSE(init_test());
 
     uint32_t g = 47, p = 67;
@@ -452,18 +452,4 @@ extern void make_list_suite(list_type_t list_type) {
     CU_add_test(suite, "Simple add test", simple_add_test);
     CU_add_test(suite, "Simple clear test", simple_clear_test);
     CU_add_test(suite, "Simple sort test", simple_sort_test);
-}
-
-int main(void) {
-    CU_initialize_registry();
-
-    CU_basic_set_mode(CU_BRM_VERBOSE);
-
-    make_list_suite(LINKED_LIST);
-    // make_list_suite(ARRAY_LIST);
-
-    CU_basic_run_tests();
-    CU_cleanup_registry();
-
-    return CU_get_error();
 }
