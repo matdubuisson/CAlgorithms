@@ -6,7 +6,7 @@
 typedef struct list list_t;
 
 typedef struct array_list {
-    void **array;
+    void *array;
     uint32_t start, stop;
     uint32_t array_length;
 } array_list_t;
