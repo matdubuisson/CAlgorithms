@@ -247,7 +247,7 @@ extern void simple_remove_first_test(void) {
         CU_ASSERT_FALSE(list_add_last(list, &values[i]));
     }
 
-    uint32_t *e;
+    uint32_t *e, v;
     for (uint32_t i = 0; i < 10; i++) {
         CU_ASSERT_EQUAL(list_get_length(list), 10 - i);
 
@@ -255,7 +255,7 @@ extern void simple_remove_first_test(void) {
         CU_ASSERT_PTR_NOT_NULL(e);
         if (e != NULL) CU_ASSERT_EQUAL(*e, values[i]);
 
-        e = list_remove_first(list);
+        e = list_remove_first(list, &v);
         CU_ASSERT_PTR_NOT_NULL(e);
         if (e != NULL) CU_ASSERT_EQUAL(*e, values[i]);
     }
@@ -263,7 +263,7 @@ extern void simple_remove_first_test(void) {
     CU_ASSERT_EQUAL(list_get_length(list), 0);
     CU_ASSERT_EQUAL(list_get_first(list), NULL);
 
-    CU_ASSERT_PTR_NULL(list_remove_first(list));
+    CU_ASSERT_PTR_NULL(list_remove_first(list, &v));
 
     CU_ASSERT_FALSE(clean_test());
 }
@@ -277,7 +277,7 @@ extern void simple_remove_last_test(void) {
         CU_ASSERT_FALSE(list_add_last(list, &values[i]));
     }
 
-    uint32_t *e;
+    uint32_t *e, v;
     for (uint32_t i = 0; i < 10; i++) {
         CU_ASSERT_EQUAL(list_get_length(list), 10 - i);
 
@@ -285,7 +285,7 @@ extern void simple_remove_last_test(void) {
         CU_ASSERT_PTR_NOT_NULL(e);
         if (e != NULL) CU_ASSERT_EQUAL(*e, values[10 - i - 1]);
 
-        e = list_remove_last(list);
+        e = list_remove_last(list, &v);
         CU_ASSERT_PTR_NOT_NULL(e);
         if (e != NULL) CU_ASSERT_EQUAL(*e, values[10 - i - 1]);
     }
@@ -293,7 +293,7 @@ extern void simple_remove_last_test(void) {
     CU_ASSERT_EQUAL(list_get_length(list), 0);
     CU_ASSERT_EQUAL(list_get_last(list), NULL);
 
-    CU_ASSERT_PTR_NULL(list_remove_last(list));
+    CU_ASSERT_PTR_NULL(list_remove_last(list, &v));
 
     CU_ASSERT_FALSE(clean_test());
 }
@@ -307,43 +307,44 @@ extern void simple_remove_test(void) {
         CU_ASSERT_FALSE(list_add_last(list, &values[i]));
     }
 
-    uint32_t *e = list_remove(list, 5);
+    uint32_t v;
+    uint32_t *e = list_remove(list, 5, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 25);
 
-    e = list_remove(list, 3);
+    e = list_remove(list, 3, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 9);
 
-    e = list_remove(list, 10 - 2 - 1);
+    e = list_remove(list, 10 - 2 - 1, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 81);
 
-    e = list_remove(list, 10 - 3 - 1);
+    e = list_remove(list, 10 - 3 - 1, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 64);
 
-    e = list_remove(list, 0);
+    e = list_remove(list, 0, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 0);
 
-    e = list_remove(list, 0);
+    e = list_remove(list, 0, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 1);
 
-    e = list_remove(list, 0);
+    e = list_remove(list, 0, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 4);
 
-    e = list_remove(list, 0);
+    e = list_remove(list, 0, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 16);
 
-    e = list_remove(list, 1);
+    e = list_remove(list, 1, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 49);
 
-    e = list_remove(list, 0);
+    e = list_remove(list, 0, &v);
     CU_ASSERT_PTR_NOT_NULL(e);
     if (e != NULL) CU_ASSERT_EQUAL(*e, 36);
 

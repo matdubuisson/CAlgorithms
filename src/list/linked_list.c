@@ -10,11 +10,21 @@ static linked_list_t *get_concrete_data(list_t *list) {
 
 static linked_list_node_t *create_new_node(list_t *list, void *element) {
     linked_list_node_t *newNode = malloc(sizeof(linked_list_node_t));
-    if (newNode != NULL) {
-        newNode->element = element;
-        newNode->next = NULL;
-    }
+    if (newNode == NULL)
+        return NULL;
+
+    newNode->element = malloc(list->data_size);
+    if (newNode->element == NULL)
+        return NULL;
+
+    memcpy(newNode->element, element, list->data_size);
+    newNode->next = NULL;
     return newNode;
+}
+
+static inline void destroy_node(linked_list_node_t *node) {
+    free(node->element);
+    free(node);
 }
 
 extern list_t* linked_list_create(list_t *list) {
@@ -29,7 +39,7 @@ extern void linked_list_destroy(list_t *list) {
     linked_list_node_t *current = linked_list->head, *next;
     while (current != NULL) {
         next = current->next;
-        free(current);
+        destroy_node(current);
         current = next;
     }
     linked_list->head = NULL;
@@ -127,7 +137,7 @@ extern int8_t linked_list_set(list_t *list, void *element, uint32_t index) {
     linked_list_node_t *current = linked_list->head;
     for (uint32_t i = 0; i < list->length && current != NULL; i++, current = current->next) {
         if (i == index) {
-            current->element = element;
+            memcpy(current->element, element, list->data_size);
             return 0;
         }
     }
@@ -187,7 +197,7 @@ extern uint32_t linked_list_find(list_t *list, void *element) {
     return UINT32_MAX;
 }
 
-extern void *linked_list_remove_first(list_t *list) {
+extern void *linked_list_remove_first(list_t *list, void *element) {
     linked_list_t *linked_list = get_concrete_data(list);
     if (linked_list->head == NULL)
         return NULL;
@@ -197,12 +207,13 @@ extern void *linked_list_remove_first(list_t *list) {
         linked_list->head = linked_list->tail = NULL;
     else
         linked_list->head = old_head->next;
-    free(old_head);
+    memcpy(element, old_head->element, list->data_size);
+    destroy_node(old_head);
     list->length--;
-    return head_element;
+    return element;
 }
 
-extern void *linked_list_remove_last(list_t *list) {
+extern void *linked_list_remove_last(list_t *list, void *element) {
     linked_list_t *linked_list = get_concrete_data(list);
     if (linked_list->head == NULL)
         return NULL;
@@ -216,18 +227,19 @@ extern void *linked_list_remove_last(list_t *list) {
             current = current->next;
         linked_list->tail = current;
     }
-    free(old_tail);
+    memcpy(element, old_tail->element, list->data_size);
+    destroy_node(old_tail);
     list->length--;
-    return tail_element;
+    return element;
 }
 
-extern void *linked_list_remove(list_t *list, uint32_t index) {
+extern void *linked_list_remove(list_t *list, uint32_t index, void *element) {
     if (list->length == 0)
         return NULL;
     else if (index == 0)
-        return linked_list_remove_first(list);
+        return linked_list_remove_first(list, element);
     else if (index == list->length - 1)
-        return linked_list_remove_last(list);
+        return linked_list_remove_last(list, element);
     else {
         linked_list_t *linked_list = get_concrete_data(list);
         linked_list_node_t *previous = linked_list->head, *current = previous->next;
@@ -236,9 +248,10 @@ extern void *linked_list_remove(list_t *list, uint32_t index) {
             if (i == index - 1) {
                 void *removed_element = current->element;
                 previous->next = current->next;
-                free(current);
+                memcpy(element, current->element, list->data_size);
+                destroy_node(current);
                 list->length--;
-                return removed_element;
+                return element;
             }
             previous = current;
             current = current->next;
@@ -254,7 +267,7 @@ extern int8_t linked_list_clear(list_t *list) {
     while (current != NULL) {
         previous = current;
         current = current->next;
-        free(previous);
+        destroy_node(previous);
     }
     linked_list->head = linked_list->tail = NULL;
     list->length = 0;

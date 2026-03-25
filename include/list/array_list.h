@@ -29,9 +29,9 @@ void *array_list_get(list_t *list, uint32_t index);
 int8_t array_list_contains(list_t *list, void *element);
 uint32_t array_list_find(list_t *list, void *element);
 
-void *array_list_remove_first(list_t *list);
-void *array_list_remove_last(list_t *list);
-void *array_list_remove(list_t *list, uint32_t index);
+void *array_list_remove_first(list_t *list, void *element);
+void *array_list_remove_last(list_t *list, void *element);
+void *array_list_remove(list_t *list, uint32_t index, void *element);
 
 int8_t array_list_clear(list_t *list);
 int8_t array_list_sort(list_t *list);

@@ -108,15 +108,15 @@ extern uint32_t array_list_find(list_t *list, void *element) {
     return UINT32_MAX;
 }
 
-extern void *array_list_remove_first(list_t *list) {
+extern void *array_list_remove_first(list_t *list, void *element) {
     return 0;
 }
 
-extern void *array_list_remove_last(list_t *list) {
+extern void *array_list_remove_last(list_t *list, void *element) {
     return 0;
 }
 
-extern void *array_list_remove(list_t *list, uint32_t index) {
+extern void *array_list_remove(list_t *list, uint32_t index, void *element) {
     return 0;
 }
 

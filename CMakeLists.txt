@@ -15,6 +15,7 @@ target_compile_options(calgorithmslib PRIVATE
     # -Wpedantic
     -lcunit
     -O0
+    -g
 )
 
 target_include_directories(calgorithmslib PUBLIC include)

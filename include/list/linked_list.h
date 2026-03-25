@@ -32,9 +32,9 @@ void *linked_list_get(list_t *list, uint32_t index);
 int8_t linked_list_contains(list_t *list, void *element);
 uint32_t linked_list_find(list_t *list, void *element);
 
-void *linked_list_remove_first(list_t *list);
-void *linked_list_remove_last(list_t *list);
-void *linked_list_remove(list_t *list, uint32_t index);
+void *linked_list_remove_first(list_t *list, void *element);
+void *linked_list_remove_last(list_t *list, void *element);
+void *linked_list_remove(list_t *list, uint32_t index, void *element);
 
 int8_t linked_list_clear(list_t *list);
 int8_t linked_list_sort(list_t *list);

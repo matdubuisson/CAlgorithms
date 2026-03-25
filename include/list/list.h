@@ -197,7 +197,7 @@ uint32_t list_find(list_t *list, void *element);
  * @param list list_t*
  * @return int8_t 
  */
-void *list_remove_first(list_t *list);
+void *list_remove_first(list_t *list, void *element);
 
 /**
  * @brief 
@@ -205,7 +205,7 @@ void *list_remove_first(list_t *list);
  * @param list list_t*
  * @return int8_t 
  */
-void *list_remove_last(list_t *list);
+void *list_remove_last(list_t *list, void *element);
 
 /**
  * @brief 
@@ -214,7 +214,7 @@ void *list_remove_last(list_t *list);
  * @param index 
  * @return int8_t 
  */
-void *list_remove(list_t *list, uint32_t index);
+void *list_remove(list_t *list, uint32_t index, void *element);
 
 /**
  * @brief 

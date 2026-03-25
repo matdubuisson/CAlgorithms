@@ -158,32 +158,32 @@ extern uint32_t list_find(list_t *list, void *element) {
     }
 }
 
-extern void *list_remove_first(list_t *list) {
+extern void *list_remove_first(list_t *list, void *element) {
     switch (list->type) {
         case ARRAY_LIST:
-            return array_list_remove_first(list);
+            return array_list_remove_first(list, element);
         case LINKED_LIST:
-            return linked_list_remove_first(list);
+            return linked_list_remove_first(list, element);
         default: return NULL;
     }
 }
 
-extern void *list_remove_last(list_t *list) {
+extern void *list_remove_last(list_t *list, void *element) {
     switch (list->type) {
         case ARRAY_LIST:
-            return array_list_remove_last(list);
+            return array_list_remove_last(list, element);
         case LINKED_LIST:
-            return linked_list_remove_last(list);
+            return linked_list_remove_last(list, element);
         default: return NULL;
     }
 }
 
-extern void *list_remove(list_t *list, uint32_t index) {
+extern void *list_remove(list_t *list, uint32_t index, void *element) {
     switch (list->type) {
         case ARRAY_LIST:
-            return array_list_remove(list, index);
+            return array_list_remove(list, index, element);
         case LINKED_LIST:
-            return linked_list_remove(list, index);
+            return linked_list_remove(list, index, element);
         default: return NULL;
     }
 }
