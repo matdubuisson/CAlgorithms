@@ -8,13 +8,19 @@ static array_list_t *get_concrete_data(list_t *list) {
     return &list->concrete.array_list;
 }
 
+static inline uint32_t convert_index_to_bytes(const list_t *list, uint32_t index) {
+    return index * list->data_size;
+}
+
 extern list_t* array_list_create(list_t *list, uint32_t initial_length) {
     array_list_t *array_list = get_concrete_data(list);
-    if (initial_length > 0) {
-        array_list->array = malloc(list->data_size * initial_length);
+    if (initial_length == 0)
+        array_list->array = NULL;
+    else {
+        array_list->array = malloc(convert_index_to_bytes(list, initial_length));
         if (array_list->array == NULL)
             return NULL;
-    } else array_list->array = NULL;
+    }
     array_list->array_length = initial_length;
     array_list->start = 0;
     array_list->stop = initial_length;
@@ -33,7 +39,7 @@ static inline int8_t check_array(list_t *list, array_list_t *array_list) {
     else if (list->length < array_list->array_length / 4)
         new_length = array_list->array_length / 2;
     else return 0;
-    void *new_array = realloc(array_list->array, list->data_size * new_length);
+    void *new_array = realloc(array_list->array, convert_index_to_bytes(list, new_length));
     if (new_array == NULL)
         return -1;
     array_list->array = new_array;
@@ -43,16 +49,16 @@ static inline int8_t check_array(list_t *list, array_list_t *array_list) {
 
 static void insert_and_shift(const list_t *list, const array_list_t *array_list,
     const void *element, const uint32_t index) {
-    for (uint32_t i = list->length, k = list->length * list->data_size;
+    for (uint32_t i = list->length, k = convert_index_to_bytes(list, list->length);
         i > index; --i, k -= list->data_size) {
         memcpy(&array_list->array[k], &array_list->array[k - list->data_size], list->data_size);
     }
-    memcpy(&array_list->array[index * list->data_size], element, list->data_size);
+    memcpy(&array_list->array[convert_index_to_bytes(list, index)], element, list->data_size);
 }
 
 static void shift_back(const list_t *list, const array_list_t *array_list,
     const uint32_t index) {
-    for (uint32_t i = index, k = index * list->data_size;
+    for (uint32_t i = index, k = convert_index_to_bytes(list, index);
         i < list->length - 1; ++i, k += list->data_size) {
         memcpy(&array_list->array[k], &array_list->array[k + list->data_size], list->data_size);
     }
@@ -71,7 +77,7 @@ extern int8_t array_list_add_last(list_t *list, void *element) {
     array_list_t *array_list = get_concrete_data(list);
     if (check_array(list, array_list) == -1)
         return -1;
-    memcpy(&array_list->array[list->length * list->data_size], element, list->data_size);
+    memcpy(&array_list->array[convert_index_to_bytes(list, list->length)], element, list->data_size);
     list->length++;
     return 0;
 }
@@ -87,7 +93,7 @@ extern int8_t array_list_add(list_t *list, void *element) {
             return 0;
         }
     }
-    memcpy(&array_list->array[list->length * list->data_size], element, list->data_size);
+    memcpy(&array_list->array[convert_index_to_bytes(list, list->length)], element, list->data_size);
     list->length++;
     return 0;
 }
@@ -109,7 +115,7 @@ extern int8_t array_list_set(list_t *list, void *element, uint32_t index) {
     array_list_t *array_list = get_concrete_data(list);
     if (check_array(list, array_list) == -1)
         return -1;
-    memcpy(&array_list->array[index * list->data_size], element, list->data_size);
+    memcpy(&array_list->array[convert_index_to_bytes(list, index)], element, list->data_size);
     return 0;
 }
 
@@ -124,7 +130,7 @@ extern void *array_list_get_last(list_t *list) {
     if (list->length == 0)
         return NULL;
     array_list_t *array_list = get_concrete_data(list);
-    return &array_list->array[(list->length - 1) * list->data_size];
+    return &array_list->array[convert_index_to_bytes(list, list->length - 1)];
 }
 
 extern void *array_list_get(list_t *list, uint32_t index) {
@@ -133,7 +139,7 @@ extern void *array_list_get(list_t *list, uint32_t index) {
     else if (index >= list->length)
         return NULL;
     array_list_t *array_list = get_concrete_data(list);
-    return &array_list->array[index * list->data_size];
+    return &array_list->array[convert_index_to_bytes(list, index)];
 }
 
 extern int8_t array_list_contains(list_t *list, void *element) {
@@ -141,7 +147,7 @@ extern int8_t array_list_contains(list_t *list, void *element) {
     if (check_array(list, array_list) == -1)
         return -1;
     for (uint32_t i = 0; i < list->length; i++) {
-        if (list->comparator(&array_list->array[i * list->data_size], element) == 0)
+        if (list->comparator(&array_list->array[convert_index_to_bytes(list, i)], element) == 0)
             return 1;
     }
     return 0;
@@ -175,7 +181,7 @@ extern void *array_list_remove_last(list_t *list, void *element) {
     array_list_t *array_list = get_concrete_data(list);
     if (check_array(list, array_list) == -1)
         return NULL;
-    memcpy(element, &array_list->array[(list->length - 1) * list->data_size], list->data_size);
+    memcpy(element, &array_list->array[convert_index_to_bytes(list, list->length - 1)], list->data_size);
     list->length--;
     return element;
 }
@@ -188,7 +194,7 @@ extern void *array_list_remove(list_t *list, uint32_t index, void *element) {
     array_list_t *array_list = get_concrete_data(list);
     if (check_array(list, array_list) == -1)
         return NULL;
-    memcpy(element, &array_list->array[index * list->data_size], list->data_size);
+    memcpy(element, &array_list->array[convert_index_to_bytes(list, index)], list->data_size);
     shift_back(list, array_list, index);
     list->length--;
     return element;
