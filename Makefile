@@ -6,7 +6,7 @@ build:
 	cmake --build build/
 
 test:
-	cd build/ && ctest -VV -R $(regex)
+	cd build/ && ctest -V -R $(regex)
 
 test_all:
 	cd build/ && ctest -VV
