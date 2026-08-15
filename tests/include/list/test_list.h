@@ -3,6 +3,6 @@
 
 #include "list/list.h"
 
-void make_list_suite(list_type_t list_type);
+int run_tests(list_type_t type);
 
 #endif

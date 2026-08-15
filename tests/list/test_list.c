@@ -4,10 +4,11 @@
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
 
-#include "list/test_list.h"
-
 #include "list/list.h"
 #include "list/linked_list.h"
+#include "list/array_list.h"
+
+#include "list/test_list.h"
 
 list_t *list = NULL;
 list_type_t type = LINKED_LIST;
@@ -409,11 +410,17 @@ extern void simple_sort_test(void) {
     for (uint32_t i = 1; i < 100; i++) {
         values[i] = (values[i - 1] * g) % p;
         CU_ASSERT_FALSE(list_add_first(list, &values[i]));
+
+        uint32_t *e = list_get_first(list);
+        printf("%u) %u ===> %u\n", i, values[i], *e);
     }
 
     CU_ASSERT_FALSE(list_sort(list));
 
     for (uint32_t i = 1; i < 100; i++) {
+        uint32_t *a = list_get(list, i - 1);
+        uint32_t *b = list_get(list, i);
+        printf("%u vs %u\n", *a, *b);
         CU_ASSERT_TRUE(
             comparator(
                 list_get(list, i - 1),
@@ -453,4 +460,17 @@ extern void make_list_suite(list_type_t list_type) {
     CU_add_test(suite, "Simple add test", simple_add_test);
     CU_add_test(suite, "Simple clear test", simple_clear_test);
     CU_add_test(suite, "Simple sort test", simple_sort_test);
+}
+
+extern int run_tests(list_type_t type) {
+    CU_initialize_registry();
+
+    CU_basic_set_mode(CU_BRM_VERBOSE);
+
+    make_list_suite(type);
+
+    CU_basic_run_tests();
+    CU_cleanup_registry();
+
+    return CU_get_error();
 }
